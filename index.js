@@ -1,27 +1,15 @@
-const { rejects } = require("assert");
-
 function getProductsUrl(keyword) {
     return `https://www.blibli.com/backend/search/products?searchTerm=${keyword}`;
 }
 
 function getProducts(keyword) {
-    const promise = new Promise((resolve, reject) => {
-        const ajax = new XMLHttpRequest()
-        
-        ajax.onload = function() {
-            if(ajax.status === 200) {
-                const data = JSON.parse(ajax.responseText)
-                resolve(data)
-            } else {
-                reject(Error("Gagal mengambil data produk"))
-            }
-        }
-
-        const url = getProductsUrl(keyword)
-        ajax.open('get', url)
-        ajax.send()
+    // FETCH
+    url = getProductsUrl(keyword)
+    return fetch(url, {
+        method: "GET",
+    }).then(res=> {
+        return res.json()
     })
-    return promise;
 }
 
 function clearProducts() {
@@ -38,48 +26,17 @@ function displayProduct(product) {
 }
 
 function buttonClick() {
-    const promise1 = getProducts(document.getElementById("keyword").value)
-    const promise2 = getProducts(document.getElementById("keyword2").value)
-    const promise3 = getProducts(document.getElementById("keyword3").value)
-
-    Promise.all([promise1, promise2, promise3])
-        .then(values => {
-            return values.map(value=> value.data.products)
+    const val = document.getElementById("keyword").value
+    const promise = getProducts(val)
+    promise
+        .then(value=> {
+            return value.data.products;
         })
-        .then(values => {
+        .then(products=> {
             clearProducts()
-            values.forEach(products=> {
-                products.forEach(product=> {
-                    displayProduct(product)
-                })
-            })
+            products.forEach(product => {
+                displayProduct(product)
+            });
         })
-        .catch(error=> {
-            alert(error.message)
-        })
-    // promise1
-    //     .then(value => {return value.data.products})
-    //     .then(products => {
-    //         clearProducts()
-    //         products.forEach(product=> {
-    //             displayProduct(product)
-    //         })
-    //     })
-    //     .catch(error=> alert(error.message))
-    // promise2
-    //     .then(value => {return value.data.products})
-    //     .then(products => {
-    //         products.forEach(product=> {
-    //             displayProduct(product)
-    //         })
-    //     })
-    //     .catch(error=> alert(error.message))
-    // promise3
-    //     .then(value => {return value.data.products})
-    //     .then(products => {
-    //         products.forEach(product=> {
-    //             displayProduct(product)
-    //         })
-    //     })
-    //     .catch(error=> alert(error.message))
+        .catch(err=> alert(err.message))
 }
