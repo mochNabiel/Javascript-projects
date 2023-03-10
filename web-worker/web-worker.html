@@ -10,15 +10,16 @@
     <button onclick="buttonClick()">Search</button>
     <script>
         const worker = new Worker("web-worker.js")
-        function showLog(total) {
-            for(let i = 0; i<total;i++) {
-                console.log(i)
-            }
-        }
+        worker.addEventListener("message", event => {
+            console.log(`Receive Message from web worker : ${event.data}`)
+        })
+
+        // send back
+        postMessage(message)
 
         function buttonClick() {
             console.log("start")
-            showLog(20000)
+            worker.postMessage(20000)
             console.log("finish")
         }
     </script>
