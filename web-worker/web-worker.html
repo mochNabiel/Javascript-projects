@@ -9,13 +9,10 @@
 <body>
     <button onclick="buttonClick()">Search</button>
     <script>
-        const worker = new Worker("web-worker.js")
+        const worker = new Worker("./web-worker.js")
         worker.addEventListener("message", event => {
             console.log(`Receive Message from web worker : ${event.data}`)
         })
-
-        // send back
-        postMessage(message)
 
         function buttonClick() {
             console.log("start")
