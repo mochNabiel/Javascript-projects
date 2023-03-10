@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEB WORKER</title>
+</head>
+<body>
+    <button onclick="buttonClick()">Search</button>
+    <script>
+        const worker = new Worker("web-worker.js")
+        function showLog(total) {
+            for(let i = 0; i<total;i++) {
+                console.log(i)
+            }
+        }
+
+        function buttonClick() {
+            console.log("start")
+            showLog(20000)
+            console.log("finish")
+        }
+    </script>
+</body>
+</html>
